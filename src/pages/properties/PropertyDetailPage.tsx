@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +11,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Bed, Bath, Home, MapPin, Calendar, Phone, Share2, Heart } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 const PropertyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,16 +21,18 @@ const PropertyDetailPage = () => {
   const { data: property, isLoading, isError } = useQuery({
     queryKey: ['property', id],
     queryFn: () => id ? getPropertyById(id) : null,
-    onSuccess: () => {
-      // Increment view count
-      if (id) incrementPropertyView(id).catch(console.error);
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Error loading property",
-        description: error.message || "Failed to load property details. Please try again.",
-        variant: "destructive",
-      });
+    meta: {
+      onSuccess: () => {
+        // Increment view count
+        if (id) incrementPropertyView(id).catch(console.error);
+      },
+      onError: (error: any) => {
+        toast({
+          title: "Error loading property",
+          description: error.message || "Failed to load property details. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   });
 

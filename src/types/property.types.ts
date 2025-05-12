@@ -81,3 +81,16 @@ export interface PropertySearchFilters {
   page?: number;
   limit?: number;
 }
+
+export interface PropertyCardProps {
+  id: string;
+  title: string;
+  price?: number;
+  currency?: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  propertyType?: string;
+  location: string;
+  imageUrl: string;
+  isFeatured?: boolean;
+}

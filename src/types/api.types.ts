@@ -3,6 +3,9 @@
  * API related types for the RentInLondon4U application
  */
 
+import { PropertyFeatures, PropertyAdType, PropertyVisibility } from './property.types';
+import { NotificationStatus } from './notification.types';
+
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;

@@ -9,7 +9,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import PropertySearch from '@/components/PropertySearch';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 const PropertiesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -48,12 +48,14 @@ const PropertiesPage = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['properties', filters],
     queryFn: () => searchProperties(filters),
-    onError: (error: any) => {
-      toast({
-        title: "Error loading properties",
-        description: error.message || "Failed to load properties. Please try again.",
-        variant: "destructive",
-      });
+    meta: {
+      onError: (error: any) => {
+        toast({
+          title: "Error loading properties",
+          description: error.message || "Failed to load properties. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   });
 
@@ -94,7 +96,7 @@ const PropertiesPage = () => {
           
           {/* Search and filter component */}
           <PropertySearch 
-            initialFilters={filters} 
+            filters={filters} 
             onFilterChange={handleFilterChange} 
           />
         </div>
@@ -111,7 +113,15 @@ const PropertiesPage = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {data.properties.map((property) => (
-                <PropertyCard key={property.id} {...property} />
+                <PropertyCard 
+                  key={property.id} 
+                  {...property} 
+                  location={`${property.city}, ${property.country}`}
+                  imageUrl={property.images && property.images.length > 0 
+                    ? property.images[0].url 
+                    : '/placeholder.svg'
+                  }
+                />
               ))}
             </div>
             
