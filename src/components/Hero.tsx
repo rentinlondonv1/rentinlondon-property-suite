@@ -1,30 +1,25 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import PropertySearch from './PropertySearch';
 import { Link } from 'react-router-dom';
 import { PropertySearchFilters } from '@/types';
-
 const Hero = () => {
   const [filters, setFilters] = useState<PropertySearchFilters>({
     city: '',
     priceMax: 1000
   });
-
   const handleFilterChange = (newFilters: Partial<PropertySearchFilters>) => {
-    setFilters(prev => ({ ...prev, ...newFilters }));
+    setFilters(prev => ({
+      ...prev,
+      ...newFilters
+    }));
   };
-
-  return (
-    <div className="relative bg-gray-900 overflow-hidden">
+  return <div className="relative bg-gray-900 overflow-hidden">
       {/* Background image with overlay */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center"
-        style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1529655683826-aba9b3e77383?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
-          backgroundBlendMode: 'multiply',
-        }}
-      >
+      <div className="absolute inset-0 z-0 bg-cover bg-center" style={{
+      backgroundImage: 'url("https://images.unsplash.com/photo-1529655683826-aba9b3e77383?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+      backgroundBlendMode: 'multiply'
+    }}>
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-gray-900/50"></div>
       </div>
 
@@ -59,10 +54,7 @@ const Hero = () => {
           
           {/* Right side search component */}
           <div className="lg:w-1/2 lg:pl-8">
-            <PropertySearch 
-              filters={filters}
-              onFilterChange={handleFilterChange}
-            />
+            <PropertySearch filters={filters} onFilterChange={handleFilterChange} />
           </div>
         </div>
       </div>
@@ -73,8 +65,6 @@ const Hero = () => {
           <path fill="#ffffff" fillOpacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,170.7C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
         </svg>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Hero;
