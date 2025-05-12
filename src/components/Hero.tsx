@@ -1,10 +1,20 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import PropertySearch from './PropertySearch';
 import { Link } from 'react-router-dom';
+import { PropertySearchFilters } from '@/types';
 
 const Hero = () => {
+  const [filters, setFilters] = useState<PropertySearchFilters>({
+    city: '',
+    priceMax: 1000
+  });
+
+  const handleFilterChange = (newFilters: Partial<PropertySearchFilters>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+
   return (
     <div className="relative bg-gray-900 overflow-hidden">
       {/* Background image with overlay */}
@@ -49,7 +59,10 @@ const Hero = () => {
           
           {/* Right side search component */}
           <div className="lg:w-1/2 lg:pl-8">
-            <PropertySearch />
+            <PropertySearch 
+              filters={filters}
+              onFilterChange={handleFilterChange}
+            />
           </div>
         </div>
       </div>

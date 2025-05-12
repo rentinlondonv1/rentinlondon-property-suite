@@ -1,6 +1,35 @@
 
 import { supabase } from './db';
-import { Property, PropertyDB, PropertySearchFilters } from '@/types';
+import { Property, PropertyDB, PropertySearchFilters, PropertyImage, PropertyFeatures, PropertyType, PropertyStatus, PropertyAdType, PropertyPromotionStatus, PropertyVisibility } from '@/types';
+import { Json } from '@/integrations/supabase/types';
+
+/**
+ * Safely convert JSON features to PropertyFeatures
+ */
+const convertFeatures = (featuresJson: Json | null): PropertyFeatures | undefined => {
+  if (!featuresJson) return undefined;
+  
+  try {
+    return featuresJson as PropertyFeatures;
+  } catch (error) {
+    console.error('Error parsing features:', error);
+    return undefined;
+  }
+};
+
+/**
+ * Safely convert JSON images to PropertyImages array
+ */
+const convertImages = (imagesJson: Json | null): PropertyImage[] | undefined => {
+  if (!imagesJson) return undefined;
+  
+  try {
+    return imagesJson as PropertyImage[];
+  } catch (error) {
+    console.error('Error parsing images:', error);
+    return undefined;
+  }
+};
 
 /**
  * Convert database property format to frontend format
@@ -10,34 +39,34 @@ const convertToProperty = (dbProperty: PropertyDB): Property => {
     id: dbProperty.id,
     userId: dbProperty.user_id,
     title: dbProperty.title,
-    description: dbProperty.description,
-    address: dbProperty.address,
-    city: dbProperty.city,
-    country: dbProperty.country,
-    latitude: dbProperty.latitude,
-    longitude: dbProperty.longitude,
-    price: dbProperty.price,
-    currency: dbProperty.currency,
-    propertyType: dbProperty.property_type as any,
-    bedrooms: dbProperty.bedrooms,
-    bathrooms: dbProperty.bathrooms,
-    areaSqm: dbProperty.area_sqm,
-    features: dbProperty.features,
-    images: dbProperty.images,
-    virtualTourUrl: dbProperty.virtual_tour_url,
-    status: dbProperty.status,
-    availabilityDate: dbProperty.availability_date,
-    isFeatured: dbProperty.is_featured,
-    featuredUntil: dbProperty.featured_until,
-    adType: dbProperty.ad_type,
-    viewsCount: dbProperty.views_count,
-    contactClicks: dbProperty.contact_clicks,
-    listingCreatedAt: dbProperty.listing_created_at,
-    listingExpiresAt: dbProperty.listing_expires_at,
-    promotionStatus: dbProperty.promotion_status,
-    visibility: dbProperty.visibility,
-    createdAt: dbProperty.created_at,
-    updatedAt: dbProperty.updated_at
+    description: dbProperty.description || undefined,
+    address: dbProperty.address || undefined,
+    city: dbProperty.city || '',
+    country: dbProperty.country || '',
+    latitude: dbProperty.latitude || undefined,
+    longitude: dbProperty.longitude || undefined,
+    price: dbProperty.price || undefined,
+    currency: dbProperty.currency || 'GBP',
+    propertyType: (dbProperty.property_type as PropertyType) || undefined,
+    bedrooms: dbProperty.bedrooms || undefined,
+    bathrooms: dbProperty.bathrooms || undefined,
+    areaSqm: dbProperty.area_sqm || undefined,
+    features: convertFeatures(dbProperty.features),
+    images: convertImages(dbProperty.images),
+    virtualTourUrl: dbProperty.virtual_tour_url || undefined,
+    status: (dbProperty.status as PropertyStatus) || 'draft',
+    availabilityDate: dbProperty.availability_date || undefined,
+    isFeatured: dbProperty.is_featured || false,
+    featuredUntil: dbProperty.featured_until || undefined,
+    adType: (dbProperty.ad_type as PropertyAdType) || 'standard',
+    viewsCount: dbProperty.views_count || 0,
+    contactClicks: dbProperty.contact_clicks || 0,
+    listingCreatedAt: dbProperty.listing_created_at || new Date().toISOString(),
+    listingExpiresAt: dbProperty.listing_expires_at || undefined,
+    promotionStatus: (dbProperty.promotion_status as PropertyPromotionStatus) || 'inactive',
+    visibility: (dbProperty.visibility as PropertyVisibility) || 'public',
+    createdAt: dbProperty.created_at || new Date().toISOString(),
+    updatedAt: dbProperty.updated_at || new Date().toISOString()
   };
 };
 
@@ -129,7 +158,7 @@ export const searchProperties = async (filters: PropertySearchFilters) => {
   }
 
   return {
-    properties: (data as PropertyDB[]).map(convertToProperty),
+    properties: data ? data.map(item => convertToProperty(item as PropertyDB)) : [],
     total: count || 0,
   };
 };
@@ -249,5 +278,5 @@ export const getUserProperties = async (userId: string): Promise<Property[]> => 
     throw new Error('Failed to fetch your properties');
   }
 
-  return (data as PropertyDB[]).map(convertToProperty);
+  return data ? data.map(item => convertToProperty(item as PropertyDB)) : [];
 };

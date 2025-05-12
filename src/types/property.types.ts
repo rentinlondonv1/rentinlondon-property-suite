@@ -3,6 +3,8 @@
  * Property related types for the RentInLondon4U application
  */
 
+import { Json } from '@/integrations/supabase/types';
+
 export type PropertyStatus = 'draft' | 'published' | 'rented' | 'archived' | 'expired';
 export type PropertyAdType = 'standard' | 'featured';
 export type PropertyVisibility = 'public' | 'private' | 'unlisted';
@@ -37,34 +39,34 @@ export interface PropertyDB {
   id: string;
   user_id: string;
   title: string;
-  description?: string;
-  address?: string;
-  city: string;
-  country: string;
-  latitude?: number;
-  longitude?: number;
-  price?: number;
-  currency: string;
-  property_type?: string;
-  bedrooms?: number;
-  bathrooms?: number;
-  area_sqm?: number;
-  features?: PropertyFeatures;
-  images?: PropertyImage[];
-  virtual_tour_url?: string;
-  status: PropertyStatus;
-  availability_date?: string;
-  is_featured: boolean;
-  featured_until?: string;
-  ad_type: PropertyAdType;
-  views_count: number;
-  contact_clicks: number;
-  listing_created_at: string;
-  listing_expires_at?: string;
-  promotion_status: PropertyPromotionStatus;
-  visibility: PropertyVisibility;
-  created_at: string;
-  updated_at: string;
+  description?: string | null;
+  address?: string | null;
+  city: string | null;
+  country: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  price?: number | null;
+  currency: string | null;
+  property_type?: string | null;
+  bedrooms?: number | null;
+  bathrooms?: number | null;
+  area_sqm?: number | null;
+  features?: Json | null; // Changed from PropertyFeatures to Json
+  images?: Json | null; // Changed from PropertyImage[] to Json
+  virtual_tour_url?: string | null;
+  status: string;
+  availability_date?: string | null;
+  is_featured: boolean | null;
+  featured_until?: string | null;
+  ad_type: string;
+  views_count: number | null;
+  contact_clicks: number | null;
+  listing_created_at: string | null;
+  listing_expires_at?: string | null;
+  promotion_status: string | null;
+  visibility: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 // This interface uses camelCase for frontend code
@@ -118,6 +120,11 @@ export interface PropertySearchFilters {
   limit?: number;
 }
 
+export interface PropertySearchProps {
+  filters: PropertySearchFilters;
+  onFilterChange: (newFilters: Partial<PropertySearchFilters>) => void;
+}
+
 export interface PropertyCardProps {
   id: string;
   title: string;
@@ -130,4 +137,3 @@ export interface PropertyCardProps {
   imageUrl: string;
   isFeatured?: boolean;
 }
-
