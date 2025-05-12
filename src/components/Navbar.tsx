@@ -1,9 +1,22 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
+  const handlePublishClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!user) {
+      navigate('/auth/login');
+    } else {
+      navigate('/publish');
+    }
+  };
+
   return (
     <nav className="bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,11 +47,16 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden sm:flex sm:items-center sm:space-x-2">
-            <Button variant="outline" className="border-rentblue-500 text-rentblue-500 hover:bg-rentblue-50">
-              <Link to="/login">Log In</Link>
-            </Button>
-            <Button className="bg-rentblue-500 hover:bg-rentblue-600 text-white">
-              <Link to="/publish">Publish Property</Link>
+            {!user && (
+              <Button variant="outline" className="border-rentblue-500 text-rentblue-500 hover:bg-rentblue-50">
+                <Link to="/auth/login">Log In</Link>
+              </Button>
+            )}
+            <Button 
+              className="bg-rentblue-500 hover:bg-rentblue-600 text-white"
+              onClick={handlePublishClick}
+            >
+              Publish Property
             </Button>
           </div>
           <div className="flex items-center sm:hidden">

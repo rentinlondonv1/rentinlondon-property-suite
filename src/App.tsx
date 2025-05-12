@@ -12,6 +12,7 @@ import PropertyDetailPage from "./pages/properties/PropertyDetailPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import PublishPropertyPage from "./pages/publish/PublishPropertyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -38,7 +39,7 @@ const App = () => (
               <Route path="/auth/register" element={<RegisterPage />} />
               <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/how-it-works" element={<NotFound />} />
-              <Route path="/publish" element={<NotFound />} />
+              <Route path="/publish" element={<PublishPropertyPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
