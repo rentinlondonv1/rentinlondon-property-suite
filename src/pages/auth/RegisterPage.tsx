@@ -149,7 +149,7 @@ const RegisterPage = () => {
             <label className="block text-sm font-medium text-gray-700">
               I am a
             </label>
-            <RadioGroup value={role} onValueChange={(value) => setRole(value as UserRole)} className="flex flex-col gap-3">
+            <RadioGroup value={role} onValueChange={(value) => setRole(value as RegisterRole)} className="flex flex-col gap-3">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="tenant" id="tenant" />
                 <Label htmlFor="tenant">Tenant - I'm looking for a place to stay</Label>
