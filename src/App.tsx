@@ -9,6 +9,9 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Index from "./pages/Index";
 import PropertiesPage from "./pages/properties/PropertiesPage";
 import PropertyDetailPage from "./pages/properties/PropertyDetailPage";
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -31,8 +34,10 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/properties" element={<PropertiesPage />} />
               <Route path="/properties/:id" element={<PropertyDetailPage />} />
+              <Route path="/auth/login" element={<LoginPage />} />
+              <Route path="/auth/register" element={<RegisterPage />} />
+              <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/how-it-works" element={<NotFound />} />
-              <Route path="/login" element={<NotFound />} />
               <Route path="/publish" element={<NotFound />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

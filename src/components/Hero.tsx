@@ -1,19 +1,23 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import PropertySearch from './PropertySearch';
 import { Link } from 'react-router-dom';
 import { PropertySearchFilters } from '@/types';
+
 const Hero = () => {
   const [filters, setFilters] = useState<PropertySearchFilters>({
     city: '',
     priceMax: 1000
   });
+  
   const handleFilterChange = (newFilters: Partial<PropertySearchFilters>) => {
     setFilters(prev => ({
       ...prev,
       ...newFilters
     }));
   };
+  
   return <div className="relative bg-gray-900 overflow-hidden">
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0 bg-cover bg-center" style={{
@@ -45,8 +49,8 @@ const Hero = () => {
                 </Link>
               </Button>
               <Button variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-3">
-                <Link to="/how-it-works">
-                  How it Works
+                <Link to="/auth/login">
+                  Login / Register
                 </Link>
               </Button>
             </div>
@@ -67,4 +71,5 @@ const Hero = () => {
       </div>
     </div>;
 };
+
 export default Hero;
