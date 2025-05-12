@@ -32,6 +32,42 @@ export interface PropertyFeatures {
   [key: string]: boolean | undefined; // Allow for custom features
 }
 
+// This interface maps directly to the database columns with snake_case
+export interface PropertyDB {
+  id: string;
+  user_id: string;
+  title: string;
+  description?: string;
+  address?: string;
+  city: string;
+  country: string;
+  latitude?: number;
+  longitude?: number;
+  price?: number;
+  currency: string;
+  property_type?: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  area_sqm?: number;
+  features?: PropertyFeatures;
+  images?: PropertyImage[];
+  virtual_tour_url?: string;
+  status: PropertyStatus;
+  availability_date?: string;
+  is_featured: boolean;
+  featured_until?: string;
+  ad_type: PropertyAdType;
+  views_count: number;
+  contact_clicks: number;
+  listing_created_at: string;
+  listing_expires_at?: string;
+  promotion_status: PropertyPromotionStatus;
+  visibility: PropertyVisibility;
+  created_at: string;
+  updated_at: string;
+}
+
+// This interface uses camelCase for frontend code
 export interface Property {
   id: string;
   userId: string;
@@ -85,7 +121,7 @@ export interface PropertySearchFilters {
 export interface PropertyCardProps {
   id: string;
   title: string;
-  price?: number;
+  price: number;
   currency?: string;
   bedrooms?: number;
   bathrooms?: number;
@@ -94,3 +130,4 @@ export interface PropertyCardProps {
   imageUrl: string;
   isFeatured?: boolean;
 }
+

@@ -114,9 +114,15 @@ const PropertiesPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {data.properties.map((property) => (
                 <PropertyCard 
-                  key={property.id} 
-                  {...property} 
+                  key={property.id}
+                  id={property.id}
+                  title={property.title} 
                   location={`${property.city}, ${property.country}`}
+                  price={property.price}
+                  propertyType={property.propertyType}
+                  bedrooms={property.bedrooms}
+                  bathrooms={property.bathrooms}
+                  featured={property.isFeatured}
                   imageUrl={property.images && property.images.length > 0 
                     ? property.images[0].url 
                     : '/placeholder.svg'

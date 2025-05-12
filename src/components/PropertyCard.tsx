@@ -8,11 +8,11 @@ interface PropertyCardProps {
   id: string;
   title: string;
   location: string;
-  price: number;
+  price?: number;  // Made optional to match our data
   imageUrl: string;
-  propertyType: string;
-  bedrooms: number;
-  bathrooms: number;
+  propertyType?: string;  // Made optional
+  bedrooms?: number;
+  bathrooms?: number;
   featured?: boolean;
   availability?: string;
 }
@@ -21,11 +21,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   id,
   title,
   location,
-  price,
+  price = 0,  // Default value to avoid undefined issues
   imageUrl,
-  propertyType,
-  bedrooms,
-  bathrooms,
+  propertyType = 'Not specified',  // Default value
+  bedrooms = 0,
+  bathrooms = 0,
   featured = false,
   availability = "Available Now"
 }) => {
@@ -52,7 +52,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-semibold text-gray-900 hover:text-rentblue-600">{title}</h3>
-          <p className="text-rentblue-600 font-bold">£{price}/mo</p>
+          {price > 0 && <p className="text-rentblue-600 font-bold">£{price}/mo</p>}
         </div>
         
         <div className="flex items-center mb-3 text-gray-600">
@@ -64,9 +64,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
         
         <div className="flex flex-wrap gap-2 mb-3">
-          <span className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
-            {propertyType}
-          </span>
+          {propertyType && (
+            <span className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+              {propertyType}
+            </span>
+          )}
           {bedrooms > 0 && (
             <span className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
               {bedrooms} {bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}

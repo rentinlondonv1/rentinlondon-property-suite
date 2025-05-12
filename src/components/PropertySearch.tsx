@@ -2,16 +2,17 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { PropertySearchFilters } from '@/types';
 
-const PropertySearch = () => {
-  const [location, setLocation] = useState('');
-  const [price, setPrice] = useState('');
+interface PropertySearchProps {
+  filters: PropertySearchFilters;
+  onFilterChange: (newFilters: Partial<PropertySearchFilters>) => void;
+}
 
+const PropertySearch: React.FC<PropertySearchProps> = ({ filters, onFilterChange }) => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Search with:', { location, price });
-    // Handle search logic here
+    // Search logic is handled by parent component via onFilterChange
   };
 
   return (
@@ -32,8 +33,8 @@ const PropertySearch = () => {
             id="location"
             type="text"
             placeholder="Enter address, neighborhood, or zipcode"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            value={filters.city || ''}
+            onChange={(e) => onFilterChange({ city: e.target.value })}
             className="w-full"
           />
         </div>
@@ -44,6 +45,8 @@ const PropertySearch = () => {
           </label>
           <select 
             id="property-type"
+            value={filters.propertyType || ''}
+            onChange={(e) => onFilterChange({ propertyType: e.target.value as any })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-rentblue-500 focus:border-rentblue-500"
           >
             <option value="">All property types</option>
@@ -67,13 +70,13 @@ const PropertySearch = () => {
             min="300"
             max="5000"
             step="100"
-            value={price || "1000"}
-            onChange={(e) => setPrice(e.target.value)}
+            value={filters.priceMax || 1000}
+            onChange={(e) => onFilterChange({ priceMax: Number(e.target.value) })}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mt-2"
           />
           <div className="text-right mt-1">
             <span className="font-medium text-rentblue-600">
-              {price ? `£${price}/month` : 'No limit'}
+              {filters.priceMax ? `£${filters.priceMax}/month` : 'No limit'}
             </span>
           </div>
         </div>

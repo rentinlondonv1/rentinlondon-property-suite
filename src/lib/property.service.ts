@@ -1,6 +1,45 @@
 
 import { supabase } from './db';
-import { Property, PropertySearchFilters } from '@/types';
+import { Property, PropertyDB, PropertySearchFilters } from '@/types';
+
+/**
+ * Convert database property format to frontend format
+ */
+const convertToProperty = (dbProperty: PropertyDB): Property => {
+  return {
+    id: dbProperty.id,
+    userId: dbProperty.user_id,
+    title: dbProperty.title,
+    description: dbProperty.description,
+    address: dbProperty.address,
+    city: dbProperty.city,
+    country: dbProperty.country,
+    latitude: dbProperty.latitude,
+    longitude: dbProperty.longitude,
+    price: dbProperty.price,
+    currency: dbProperty.currency,
+    propertyType: dbProperty.property_type as any,
+    bedrooms: dbProperty.bedrooms,
+    bathrooms: dbProperty.bathrooms,
+    areaSqm: dbProperty.area_sqm,
+    features: dbProperty.features,
+    images: dbProperty.images,
+    virtualTourUrl: dbProperty.virtual_tour_url,
+    status: dbProperty.status,
+    availabilityDate: dbProperty.availability_date,
+    isFeatured: dbProperty.is_featured,
+    featuredUntil: dbProperty.featured_until,
+    adType: dbProperty.ad_type,
+    viewsCount: dbProperty.views_count,
+    contactClicks: dbProperty.contact_clicks,
+    listingCreatedAt: dbProperty.listing_created_at,
+    listingExpiresAt: dbProperty.listing_expires_at,
+    promotionStatus: dbProperty.promotion_status,
+    visibility: dbProperty.visibility,
+    createdAt: dbProperty.created_at,
+    updatedAt: dbProperty.updated_at
+  };
+};
 
 /**
  * Search for properties based on filters
@@ -90,7 +129,7 @@ export const searchProperties = async (filters: PropertySearchFilters) => {
   }
 
   return {
-    properties: data as Property[],
+    properties: (data as PropertyDB[]).map(convertToProperty),
     total: count || 0,
   };
 };
@@ -114,7 +153,7 @@ export const getPropertyById = async (id: string): Promise<Property> => {
     throw new Error('Property not found');
   }
 
-  return data as Property;
+  return convertToProperty(data as PropertyDB);
 };
 
 /**
@@ -132,7 +171,7 @@ export const createProperty = async (propertyData: any, userId: string): Promise
     throw new Error('Failed to create property');
   }
 
-  return data as Property;
+  return convertToProperty(data as PropertyDB);
 };
 
 /**
@@ -151,7 +190,7 @@ export const updateProperty = async (id: string, propertyData: any): Promise<Pro
     throw new Error('Failed to update property');
   }
 
-  return data as Property;
+  return convertToProperty(data as PropertyDB);
 };
 
 /**
@@ -192,7 +231,7 @@ export const markPropertyAsFeatured = async (id: string, durationDays = 30): Pro
     throw new Error('Failed to mark property as featured');
   }
 
-  return data as Property;
+  return convertToProperty(data as PropertyDB);
 };
 
 /**
@@ -210,5 +249,5 @@ export const getUserProperties = async (userId: string): Promise<Property[]> => 
     throw new Error('Failed to fetch your properties');
   }
 
-  return data as Property[];
+  return (data as PropertyDB[]).map(convertToProperty);
 };
