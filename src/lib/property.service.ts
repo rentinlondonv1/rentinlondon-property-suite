@@ -18,16 +18,37 @@ const convertFeatures = (featuresJson: Json | null): PropertyFeatures | undefine
 };
 
 /**
- * Safely convert JSON images to PropertyImages array
+ * Safely convert JSON images to PropertyImage array
  */
 const convertImages = (imagesJson: Json | null): PropertyImage[] | undefined => {
   if (!imagesJson) return undefined;
   
   try {
-    return imagesJson as PropertyImage[];
+    // Make sure we're dealing with an array
+    if (Array.isArray(imagesJson)) {
+      return imagesJson.map(img => {
+        // Validate each image object has the required properties
+        if (typeof img === 'object' && img !== null && 'url' in img && 'publicId' in img) {
+          return {
+            url: String(img.url),
+            publicId: String(img.publicId),
+            caption: 'caption' in img ? String(img.caption) : undefined,
+            isPrimary: 'isPrimary' in img ? Boolean(img.isPrimary) : false
+          };
+        }
+        // If invalid image data, return a placeholder
+        console.warn('Invalid image data found:', img);
+        return {
+          url: '/placeholder.svg',
+          publicId: 'placeholder'
+        };
+      });
+    }
+    console.warn('Images data is not an array:', imagesJson);
+    return [];
   } catch (error) {
     console.error('Error parsing images:', error);
-    return undefined;
+    return [];
   }
 };
 
