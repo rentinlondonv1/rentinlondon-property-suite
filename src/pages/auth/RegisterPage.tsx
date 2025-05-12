@@ -7,7 +7,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { UserRole } from '@/types';
+
+// Define a more restrictive type for the role that matches what signUp expects
+type RegisterRole = 'owner' | 'tenant';
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState('');
@@ -15,7 +17,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState<UserRole>('tenant');
+  const [role, setRole] = useState<RegisterRole>('tenant');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { signUp } = useAuth();
